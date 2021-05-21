@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 /// <summary>
-/// 확장함수 샘플, 함수 이름은 중요하지 않음.
+/// 확장함수 샘플, 클래스 이름(MyExtension)은 중요하지 않음(마음대로 바꿔도됨, 파일이름과 달라도됨, 다른 클래스 이름과 중복되지만 않으면 됨)
 /// </summary>
 static public class MyExtension
 {
