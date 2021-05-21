@@ -9,6 +9,20 @@ using UnityEngine;
 /// </summary>
 static public class MyExtension
 {
+    /// <summary>
+    /// 특정 방향에서 y축을 기준으로 회전한 방향 벡터 반환
+    /// </summary>
+    /// <param name="baseDirection">기준이 되는 벡터 ex)transform.forward</param>
+    /// <param name="angle">-180 ~ 180</param>
+    /// <returns></returns>
+    static public Vector3 AngleToYDirection(this Vector3 baseDirection, float angle)
+    {
+        var quaternion = Quaternion.Euler(0, angle, 0);
+        Vector3 newDirection = quaternion * baseDirection;
+
+        return newDirection;
+    }
+
     static public string ToNumber(this int value)
     {
         return $"{value:N0}";
