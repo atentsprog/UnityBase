@@ -148,28 +148,34 @@ where T : SingletonBase
             {
                 _instance.t.transform.SetParent(existParent);
                 var rt = _instance.t.GetComponent<RectTransform>();
-                rt.anchorMin = _instance.rt.anchorMin;
-                rt.anchorMax = _instance.rt.anchorMax;
-                rt.anchoredPosition = _instance.rt.anchoredPosition;
-                rt.sizeDelta = _instance.rt.sizeDelta;
+                if (_instance.rt != null)
+                {
+                    rt.anchorMin = _instance.rt.anchorMin;
+                    rt.anchorMax = _instance.rt.anchorMax;
+                    rt.anchoredPosition = _instance.rt.anchoredPosition;
+                    rt.sizeDelta = _instance.rt.sizeDelta;
+                }
             }
         }
 
-        m_instance = _instance.t;
-        m_instance.name = GetUIName(originalPath);
-        DontDestroyOnLoad(m_instance.gameObject.transform.root);
+            m_instance = _instance.t;
+            m_instance.name = GetUIName(originalPath);
+            DontDestroyOnLoad(m_instance.gameObject.transform.root);
 
-        //어웨이크에서 실행된 경우 여기서 ExecuteOneTimeInit 할 필요 없다.
-        if(m_instance.completeUiInite == false)
-            m_instance.ExecuteOneTimeInit();
+            //어웨이크에서 실행된 경우 여기서 ExecuteOneTimeInit 할 필요 없다.
+            if(m_instance.completeUiInite == false)
+                m_instance.ExecuteOneTimeInit();
 
 
-        RectTransform rectTransform = m_instance.gameObject.GetComponent<RectTransform>();
-        rectTransform.localPosition = Vector3.zero;
-        rectTransform.localScale = Vector3.one;
+            RectTransform rectTransform = m_instance.gameObject.GetComponent<RectTransform>();
+            if (rectTransform)
+            {
+                rectTransform.localPosition = Vector3.zero;
+                rectTransform.localScale = Vector3.one;
+            }
 
-        /// 최초 '/' 앞에 있는 경로
-        string GetRootParentPath(string _originalPath)
+            /// 최초 '/' 앞에 있는 경로
+            string GetRootParentPath(string _originalPath)
         {
             string parentGoName = null;
             int firstSlashIndex = _originalPath.IndexOf('/');
