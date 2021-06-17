@@ -18,13 +18,25 @@ internal class Util
         }
     }
 
-
-    public static T InstantiateSingleton<T>() where T : SingletonBase
+    public class TempRectInfo<T> where T : SingletonBase
+    {
+        public T t;
+        public RectTransform rt;
+        public TempRectInfo(T t) {
+            this.t = t;
+        }
+        public TempRectInfo(T t, RectTransform rt)
+        {
+            this.t = t;
+            this.rt = rt;
+        }
+    }
+    public static TempRectInfo<T> InstantiateSingleton<T>() where T : SingletonBase
     {
         // 1 씬에 있는 루트 오브젝트 돌면서 꺼져 있는 오브젝트 중에 T 타입이 있는지 확인하자.
         T existSceneComponent = (T)GetAllObjectsOnlyInScene<T>();
         if (existSceneComponent != null)
-            return existSceneComponent;
+            return new TempRectInfo<T>(existSceneComponent);
 
 
         // 2. 리소스폴더(어셋번들) 경로 확인.
@@ -36,12 +48,15 @@ internal class Util
             GameObject loadGo = Instantiate(resoruceGo);
             var c = loadGo.GetComponent<T>();
             Debug.Assert(c != null, $"{name} 로드한 게임오브젝트에 컴포넌트가 없다");
-            return c;
+            RectTransform rt = resoruceGo.GetComponent<RectTransform>();
+            return new TempRectInfo<T>(c, rt);
         }
 
         // 3. 인스턴스 생성
         GameObject newComponent = new GameObject(name, type);
-        return (T)newComponent.GetComponent(typeof(T));
+        T t = (T)newComponent.GetComponent(typeof(T));
+        return new TempRectInfo<T>(t);
+        //return (T)newComponent.GetComponent(typeof(T));
     }
 
     static SingletonBase GetAllObjectsOnlyInScene<T>() where T : Component

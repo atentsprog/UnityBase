@@ -128,9 +128,9 @@ where T : SingletonBase
         }
     }
 
-    private static void SetInstance(T _instance)
+    private static void SetInstance(Util.TempRectInfo<T> _instance)
     {
-        string originalPath = _instance.HierarchyPath;
+        string originalPath = _instance.t.HierarchyPath;
 
         // 부모가 없으면 리소스 폴더에서 로드 하자 리소스 폴더에도 없다면 만들자.(CreateHierarchy)
         string rootParentPath = GetRootParentPath(originalPath);
@@ -144,11 +144,18 @@ where T : SingletonBase
                 existParent = CreateHierarchy(parentFullpaht);
             }
 
-            if(existParent)
-                _instance.transform.SetParent(existParent);
+            if (existParent)
+            {
+                _instance.t.transform.SetParent(existParent);
+                var rt = _instance.t.GetComponent<RectTransform>();
+                rt.anchorMin = _instance.rt.anchorMin;
+                rt.anchorMax = _instance.rt.anchorMax;
+                rt.anchoredPosition = _instance.rt.anchoredPosition;
+                rt.sizeDelta = _instance.rt.sizeDelta;
+            }
         }
 
-        m_instance = _instance;
+        m_instance = _instance.t;
         m_instance.name = GetUIName(originalPath);
         DontDestroyOnLoad(m_instance.gameObject.transform.root);
 
