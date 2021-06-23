@@ -28,7 +28,8 @@ public class EditorUtil
                 typeof(Animation),
                 typeof(Image),
                 typeof(Text),
-                typeof(Button)
+                typeof(Button),
+                typeof(Animator)
             });
 
         List<Transform> selectItems = new List<Transform>();// ;
