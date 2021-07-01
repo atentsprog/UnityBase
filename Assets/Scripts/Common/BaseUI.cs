@@ -150,6 +150,11 @@ where T : SingletonBase
                 var rt = _instance.t.GetComponent<RectTransform>();
                 if (_instance.rt != null)
                 {
+                    rt.anchoredPosition3D = _instance.rt.anchoredPosition3D;
+                    rt.offsetMin = _instance.rt.offsetMin;
+                    rt.offsetMax = _instance.rt.offsetMax;
+                    rt.pivot = _instance.rt.pivot;
+
                     rt.anchorMin = _instance.rt.anchorMin;
                     rt.anchorMax = _instance.rt.anchorMax;
                     rt.anchoredPosition = _instance.rt.anchoredPosition;

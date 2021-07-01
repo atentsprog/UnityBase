@@ -34,6 +34,12 @@ public class ToastMessage : SingletonMonoBehavior<ToastMessage>
     private IEnumerator showToastCo(string text,
         int duration)
     {
+        { //UI위치 안 맞아서 강제로 0위치로 이동시킴.
+            RectTransform rt = GetComponent<RectTransform>();
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+        }
+
         Color orginalColor = this.text.color;
 
         this.text.text = text;

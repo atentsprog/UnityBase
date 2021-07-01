@@ -4,26 +4,26 @@ using UnityEngine;
 
 namespace UISample
 {
-    public class GameManager : MonoBehaviour
+    public class UISampleTest: MonoBehaviour
     {
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                ChatUI.Instance.Show();
+                ChatUISample.Instance.Show();
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                ChatUI.Instance.Close();
+                ChatUISample.Instance.Close();
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                QuestUI.Instance.Show();
+                QuestUISample.Instance.Show();
             }
             if (Input.GetKeyDown(KeyCode.Alpha4))
             {
-                QuestUI.Instance.Close();
+                QuestUISample.Instance.Close();
             }
         }
     }
