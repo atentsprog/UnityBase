@@ -1,16 +1,35 @@
-﻿//using MyColor.SceneTopUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SingletonBase : MonoBehaviour
+public class HistoryUI : MonoBehaviour
 {
     static protected List<SingletonBase> MenuHistory = new List<SingletonBase>();
 
+    public static void ShowPreviousMenu(SingletonBase exceptUI = null)
+    {
+        if (exceptUI != null) // exceptUI는 제외 menuHistory에서 제거하자.
+            MenuHistory.RemoveAll(x => x == exceptUI);
+
+        int lastIndex = MenuHistory.Count - 1;
+        if (lastIndex == -1)
+        {
+            Debug.Log("보여줄 메뉴가 없다");
+            return;
+        }
+
+        var previousMenu = MenuHistory[lastIndex];
+        MenuHistory.RemoveAt(lastIndex);
+        previousMenu.Show();
+    }
+}
+
+public class SingletonBase : HistoryUI
+{
     public virtual int SortOrder => 0;
 
-    public virtual string HierarchyPath 
+    public virtual string HierarchyPath
     {
         get
         {
@@ -20,8 +39,8 @@ public class SingletonBase : MonoBehaviour
                 canvasName += SortOrder;
             }
 
-            return $"{canvasName}/" +GetType().ShortName();
-        } 
+            return $"{canvasName}/" + GetType().ShortName();
+        }
     }
 
     virtual public void Show() { }
@@ -53,8 +72,6 @@ where T : SingletonBase
     protected void OnEnable()
     {
         UIStackManager.PushUiStack(transform, CloseCallback);
-
-        AddHistory();
     }
 
 
@@ -70,26 +87,11 @@ where T : SingletonBase
         base.OnDisable();
 
         UIStackManager.PopUiStack(CacheGameObject.GetInstanceID());
+
+        AddHistory();
     }
 
     private readonly int MaxHistoryCount = 5;
-
-    protected void ShowPreviousMenu(BaseUI<T> exceptUI = null)
-    {
-        if (exceptUI != null) // exceptUI는 제외 menuHistory에서 제거하자.
-            MenuHistory.RemoveAll(x => x == exceptUI);
-
-        int lastIndex = MenuHistory.Count - 1;
-        if (lastIndex == -1)
-        {
-            Debug.Log("보여줄 메뉴가 없다");
-            return;
-        }
-
-        var previousMenu = MenuHistory[lastIndex];
-        MenuHistory.RemoveAt(lastIndex);
-        previousMenu.Show();
-    }
 }
 
 /// <summary>
@@ -108,19 +110,19 @@ where T : SingletonBase
 {
     static bool applicationQuit = false;
     private void OnApplicationQuit() => applicationQuit = true;
-    
+
     static protected T m_instance;
     static public T Instance
     {
         get
         {
-            
+
             if (m_instance == null)
             {
                 if (applicationQuit)
                     return null;
                 SetInstance(Util.InstantiateSingleton<T>());
-                
+
                 //m_instance.gameObject.SetActive(false); // 여기서 꺼버리면 Start에서 코루틴호출하는게 꺼진다 -> 강제로 끄면 안된다
             }
 
@@ -168,7 +170,7 @@ where T : SingletonBase
         DontDestroyOnLoad(m_instance.gameObject.transform.root);
 
         //어웨이크에서 실행된 경우 여기서 ExecuteOneTimeInit 할 필요 없다.
-        if(m_instance.completeUiInite == false)
+        if (m_instance.completeUiInite == false)
             m_instance.ExecuteOneTimeInit();
 
 
@@ -235,7 +237,7 @@ where T : SingletonBase
             for (int i = 1; i < paths.Length; i++)
             {
                 var item = paths[i];
-                Transform existTr = currentTr.Find(item)?? new GameObject(item).transform;
+                Transform existTr = currentTr.Find(item) ?? new GameObject(item).transform;
                 existTr.SetParent(currentTr);
                 currentTr = existTr;
             }
