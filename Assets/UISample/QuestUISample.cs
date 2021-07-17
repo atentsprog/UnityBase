@@ -15,12 +15,9 @@ namespace UISample
         new private void OnDisable()
         {
             base.OnDisable();
-            if (applicationQuit)
+            if (ToastMessage.ApplicationQuit)
                 return;
             ToastMessage.Instance.ShowToast("퀘스트 UI 닫힘");
         }
-
-        static bool applicationQuit = false;
-        private void OnApplicationQuit() => applicationQuit = true;
     }
 }

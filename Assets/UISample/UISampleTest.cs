@@ -25,6 +25,10 @@ namespace UISample
             {
                 QuestUISample.Instance.Close();
             }
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                HistoryUI.ShowPreviousMenu();
+            }
         }
     }
 }
