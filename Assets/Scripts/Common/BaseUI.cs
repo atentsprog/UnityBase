@@ -43,7 +43,10 @@ public class SingletonBase : HistoryUI
         }
     }
 
-    virtual public void Show() { }
+    // HistoryUI에서 ShowPreviousMenu 함수 호출시 사용
+    // virtual인 이유 : SingletonMonoBehavior에 있는 Show 함수를 호출 하기 위함.
+    virtual public void Show() { Debug.Log("잘못된 호출, 자식에서 Override해주세요"); } // 아래처럼 살짝 줄여서 쓸 수도 있음
+    //virtual public void Show() => Debug.Log("잘못된 호출, 자식에서 Override해주세요"); // 함수 본문은 중괄호 열고 줄바꾸는게 기본이기 때문에 어색하다. 이럴때 람다식으로 표현하면 자연스럽다.
 
     [HideInInspector]
     public bool completeUiInite = false;
@@ -62,11 +65,12 @@ where T : SingletonBase
 {
     protected bool AllowBackAction => true;
 
-
+    /// <summary>
+    /// ShowPreviousMenu실행시 호출되는 함수
+    /// </summary>
     public override void Show()
     {
         base.Show();
-
     }
 
     protected void OnEnable()
@@ -108,7 +112,7 @@ where T : SingletonBase
 public class SingletonMonoBehavior<T> : SingletonBase
 where T : SingletonBase
 {
-    public static bool ApplicationQuit = false;
+    protected static bool ApplicationQuit = false;
     private void OnApplicationQuit() => ApplicationQuit = true;
 
     static protected T m_instance;
@@ -335,12 +339,12 @@ where T : SingletonBase
         }
     }
 
-    public override void Show()
-    {
-        Show();
-    }
+    //public override void Show()
+    //{
+    //    Show();
+    //}
 
-    public void Show(bool force = true)
+    protected void Show(bool force = true)
     {
         CacheGameObject.SetActive(true);
 

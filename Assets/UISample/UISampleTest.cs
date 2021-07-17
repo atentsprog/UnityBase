@@ -29,6 +29,26 @@ namespace UISample
             {
                 HistoryUI.ShowPreviousMenu();
             }
+
+
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                MonobehaviorSingtonSample.Instance.MyPoint++;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                MonobehaviorSingtonSample.Instance.SomeMethod();
+            }
+
+
+            if (Input.GetKeyDown(KeyCode.Alpha8))
+            {
+                CSharpSingtonSample.Instance.MyPoint++;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha9))
+            {
+                CSharpSingtonSample.Instance.SomeMethod();
+            }
         }
     }
 }
