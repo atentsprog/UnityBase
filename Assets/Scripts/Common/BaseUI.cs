@@ -46,13 +46,7 @@ public class SingletonBase : HistoryUI
     {
         get
         {
-            string canvasName = "Canvas";
-            if (SortOrder > 0)
-            {
-                canvasName += SortOrder;
-            }
-
-            return $"{canvasName}/" +GetType().ShortName();
+            return GetType().ShortName();
         } 
     }
 
@@ -75,6 +69,20 @@ where T : SingletonBase
 {
     protected bool AllowBackAction => true;
 
+
+    public override string HierarchyPath
+    {
+        get
+        {
+            string canvasName = "Canvas";
+            if (SortOrder > 0)
+            {
+                canvasName += SortOrder;
+            }
+
+            return $"{canvasName}/" + GetType().ShortName();
+        }
+    }
 
     public void ShowRestoreUI()
     {
