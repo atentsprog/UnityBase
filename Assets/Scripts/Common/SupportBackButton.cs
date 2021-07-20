@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SupportBackButton : MonoBehaviour
+public class SupportBackButton : MonoBehaviour, IHistoryUI
 {
     protected void OnEnable()
     {
@@ -12,5 +12,13 @@ public class SupportBackButton : MonoBehaviour
     protected void OnDisable()
     {
         UIStackManager.PopUiStack(gameObject.GetInstanceID());
+
+        HistoryUI.AddHistory(this);
+    }
+
+    public void ShowRestoreUI()
+    {
+        gameObject.SetActive(true);
+        transform.SetAsLastSibling();
     }
 }

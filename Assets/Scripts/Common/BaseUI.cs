@@ -2,12 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IHistoryUI
+{
+    void ShowRestoreUI();
+}
 
 public class HistoryUI: MonoBehaviour
 {
-    static protected List<SingletonBase> MenuHistory = new List<SingletonBase>();
+    static protected List<IHistoryUI> MenuHistory = new List<IHistoryUI>();
 
-    public static void ShowPreviousMenu(SingletonBase exceptUI = null)
+
+    static readonly int MaxHistoryCount = 5;
+    public static void AddHistory(IHistoryUI historyUI)
+    {
+        MenuHistory.Add(historyUI);
+        if (MenuHistory.Count > MaxHistoryCount)
+            MenuHistory.RemoveAt(0);
+    }
+
+    public static void ShowPreviousMenu(IHistoryUI exceptUI = null)
     {
         if (exceptUI != null) // exceptUI는 제외 menuHistory에서 제거하자.
             MenuHistory.RemoveAll(x => x == exceptUI);
@@ -21,7 +34,7 @@ public class HistoryUI: MonoBehaviour
 
         var previousMenu = MenuHistory[lastIndex];
         MenuHistory.RemoveAt(lastIndex);
-        previousMenu.Show();
+        previousMenu.ShowRestoreUI();
     }
 }
 
@@ -57,29 +70,20 @@ public class SingletonBase : HistoryUI
 /// Close() : UI 닫는 함수
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class BaseUI<T> : SingletonMonoBehavior<T>
+public class BaseUI<T> : SingletonMonoBehavior<T>, IHistoryUI
 where T : SingletonBase
 {
     protected bool AllowBackAction => true;
 
 
-    public override void Show()
+    public void ShowRestoreUI()
     {
-        base.Show();
-
+        Show();
     }
 
     protected void OnEnable()
     {
         UIStackManager.PushUiStack(transform, CloseCallback);
-    }
-
-
-    private void AddHistory()
-    {
-        MenuHistory.Add(this);
-        if (MenuHistory.Count > MaxHistoryCount)
-            MenuHistory.RemoveAt(0);
     }
 
     override protected void OnDisable()
@@ -88,10 +92,8 @@ where T : SingletonBase
 
         UIStackManager.PopUiStack(CacheGameObject.GetInstanceID());
 
-        AddHistory();
+        AddHistory(this);
     }
-
-    private readonly int MaxHistoryCount = 5;
 }
 
 /// <summary>
@@ -335,18 +337,13 @@ where T : SingletonBase
         }
     }
 
-    public override void Show()
-    {
-        Show();
-    }
-
     public void Show(bool force = true)
     {
         CacheGameObject.SetActive(true);
 
         if (force)
         {
-            Transform parent = CacheGameObject.transform.parent;
+            Transform parent = transform.parent;
             do
             {
                 if (parent == null)
