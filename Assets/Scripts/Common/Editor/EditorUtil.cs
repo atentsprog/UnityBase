@@ -15,13 +15,12 @@ public class EditorUtil
     [MenuItem("Util/Open SourceTree #&s")]
     private static void OpenSourceTree()
     {
-        var dsc = Path.DirectorySeparatorChar;
         string applicationLocalPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData).Replace("Roaming", "");
         //Debug.Log(applicationLocalPath);
+        var filePath = $"{applicationLocalPath}Local/SourceTree/SourceTree.exe";
 
         string projectPath = Application.dataPath.Replace("/Assets", "");
         //Debug.Log(projectPath);
-        var filePath = $"{applicationLocalPath}Local{dsc}SourceTree{dsc}SourceTree.exe";
         if (File.Exists(filePath) == false)
         {
             Debug.Log(filePath + " 경로가 존재하지 않습니다");
@@ -33,12 +32,10 @@ public class EditorUtil
 
         // 씬 저장하겠는지 물어본다.
         // 변경된씬 없다면 물어보지 않는다.
-        if (UnityEditor.SceneManagement.EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) 
+        if (UnityEditor.SceneManagement.EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
         {
             // 변경된 씬이 없거나, 저장(Save)했거나 저장하지 않았을때(Don't Save) 실행된다
             // 취소했을때는 실행되지 않는다.
-            Debug.Log(1);
-
             //소스트리 실행하자.
             System.Diagnostics.Process.Start(filePath, $" -f \"{projectPath}\" status");
         }

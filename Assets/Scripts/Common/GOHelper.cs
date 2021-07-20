@@ -25,7 +25,7 @@ public class GOHelper : MonoBehaviour
     // 게임 오브젝트 활성화될때 
     private void OnEnable()
     {
-        if (OnDestroyLog)
+        if (OnEnableLog)
             WriteLog("OnEnable");
     }
 
