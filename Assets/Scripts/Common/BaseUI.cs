@@ -108,8 +108,8 @@ where T : SingletonBase
 public class SingletonMonoBehavior<T> : SingletonBase
 where T : SingletonBase
 {
-    static bool applicationQuit = false;
-    private void OnApplicationQuit() => applicationQuit = true;
+    public static bool ApplicationQuit = false;
+    private void OnApplicationQuit() => ApplicationQuit = true;
     
     static protected T m_instance;
     static public T Instance
@@ -119,7 +119,7 @@ where T : SingletonBase
             
             if (m_instance == null)
             {
-                if (applicationQuit)
+                if (ApplicationQuit)
                     return null;
                 SetInstance(Util.InstantiateSingleton<T>());
                 
