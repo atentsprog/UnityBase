@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,11 @@ namespace UISample
             if (ToastMessage.ApplicationQuit)
                 return;
             ToastMessage.Instance.ShowToast("퀘스트 UI 닫힘");
+        }
+
+        internal void VisibleToggle()
+        {
+            gameObject.SetActive(!gameObject.activeSelf);
         }
     }
 }

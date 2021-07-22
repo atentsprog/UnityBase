@@ -49,6 +49,17 @@ namespace UISample
             {
                 CSharpSingtonSample.Instance.SomeMethod();
             }
+
+
+            if (Input.GetKeyDown(KeyCode.Alpha9))
+            {
+                CSharpSingtonSample.Instance.SomeMethod();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                QuestUISample.Instance.VisibleToggle();
+            }
         }
     }
 }
