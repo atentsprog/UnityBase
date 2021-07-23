@@ -184,12 +184,12 @@ where T : SingletonBase
             m_instance.ExecuteOneTimeInit();
 
 
-        RectTransform rectTransform = m_instance.gameObject.GetComponent<RectTransform>();
-        if (rectTransform)
-        {
-            rectTransform.localPosition = Vector3.zero;
-            rectTransform.localScale = Vector3.one;
-        }
+        //RectTransform rectTransform = m_instance.gameObject.GetComponent<RectTransform>();
+        //if (rectTransform)
+        //{
+        //    rectTransform.localPosition = Vector3.zero;  <- 적용되면 원하지 않는 곳으로 UI위치 이동됨.
+        //    rectTransform.localScale = Vector3.one;
+        //}
 
         /// 최초 '/' 앞에 있는 경로
         string GetRootParentPath(string _originalPath)
