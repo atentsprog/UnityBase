@@ -52,6 +52,7 @@ internal class Util
             return new TempRectInfo<T>(c, rt);
         }
 
+        Debug.LogWarning($"주의! 씬과 리소스 폴더에 {name} 컴포넌트및 프리팹이 없어서 비어있는 클래스를 생성합니다!");
         // 3. 인스턴스 생성
         GameObject newComponent = new GameObject(name, type);
         T t = (T)newComponent.GetComponent(typeof(T));
@@ -65,14 +66,15 @@ internal class Util
         {
             if (!(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave || go.hideFlags == HideFlags.HideInHierarchy))
             {
-                T t = (T)go;
+                //T t = (T)go;
                 
                 //Debug.LogWarning($"{typeof(T)} :: ({go}: {go.GetType()} {t.gameObject}");
 
 
-                //에디터상에서 삭제한 오브젝트도 있는것으로 되어서 사용안함. 부모 없는 경우도 null 반환 시킴
-                if (t.transform.parent == null)
-                    return null;
+                //에디터상에서 삭제한 오브젝트도 있는것으로 되어서 사용안함. 부모 없는 경우도 null 반환 시킴 
+                // -> 부모 없어도 null 반환 하면 안됨. UI아니고 singletone인경우 부모 없을 수 있음.
+                //if (t.transform.parent == null)
+                //    return null;
 
                 return (SingletonBase)go;
             }
