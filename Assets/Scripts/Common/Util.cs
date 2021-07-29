@@ -62,22 +62,18 @@ internal class Util
 
     static SingletonBase GetAllObjectsOnlyInScene<T>() where T : Component
     {
-        foreach (UnityEngine.Object go in Resources.FindObjectsOfTypeAll(typeof(T)))
+        var components = Resources.FindObjectsOfTypeAll(typeof(T));
+        foreach (UnityEngine.Object co in components)
         {
-            if (!(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave || go.hideFlags == HideFlags.HideInHierarchy))
-            {
-                //T t = (T)go;
-                
-                //Debug.LogWarning($"{typeof(T)} :: ({go}: {go.GetType()} {t.gameObject}");
+            Component component = co as Component;
+            GameObject go = component.gameObject;
+            if (go.scene.isLoaded == false) // 씬에 있는 오브젝트가 아니므로 제외한다.
+                continue;
 
+            if (go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave || go.hideFlags == HideFlags.HideInHierarchy)
+                continue;
 
-                //에디터상에서 삭제한 오브젝트도 있는것으로 되어서 사용안함. 부모 없는 경우도 null 반환 시킴 
-                // -> 부모 없어도 null 반환 하면 안됨. UI아니고 singletone인경우 부모 없을 수 있음.
-                //if (t.transform.parent == null)
-                //    return null;
-
-                return (SingletonBase)go;
-            }
+            return (SingletonBase)component;
         }
 
         return null;
