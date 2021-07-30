@@ -91,6 +91,7 @@ where T : SingletonBase
 
     protected void OnEnable()
     {
+        OnShow();
         UIStackManager.PushUiStack(transform, CloseCallback);
     }
 
@@ -363,8 +364,6 @@ where T : SingletonBase
 
         // 다른 UI들보다 먼저 보이도록 하이어라키 가장 아래로 내리자.
         CacheGameObject.transform.SetAsLastSibling();
-
-        OnShow();
     }
 
 

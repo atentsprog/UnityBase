@@ -63,6 +63,15 @@ static public class EditorButtonHelperExtend
         editorButtonHelper.Init(component, unityAction.Method.ToString());
 #endif
     }
+    public static void AddListener(this Dropdown value, Component component, UnityAction<int> unityAction)
+    {
+        value.onValueChanged.AddListener(unityAction);
+
+#if UNITY_EDITOR
+        EditorButtonHelper editorButtonHelper = value.gameObject.AddComponent<EditorButtonHelper>();
+        editorButtonHelper.Init(component, unityAction.Method.ToString());
+#endif
+    }
 }
 
 public class EditorButtonHelper : MonoBehaviour
