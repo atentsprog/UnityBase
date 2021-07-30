@@ -67,7 +67,7 @@ internal class Util
         {
             Component component = co as Component;
             GameObject go = component.gameObject;
-            if (go.scene.isLoaded == false) // 씬에 있는 오브젝트가 아니므로 제외한다.
+            if (go.scene.name == null) // 씬에 있는 오브젝트가 아니므로 제외한다.
                 continue;
 
             if (go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave || go.hideFlags == HideFlags.HideInHierarchy)
