@@ -24,9 +24,7 @@ namespace UISample
         {
             base.Show();
             callbackFn = _callbackFn;
-
             contentText.text = title;
-
             DestroyChildObject();
 
             foreach (var item in buttonTexts)
