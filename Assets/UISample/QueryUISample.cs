@@ -25,6 +25,8 @@ namespace UISample
             fn = _fn;
             transform.Find("ContentText").GetComponent<Text>().text = content;
 
+            Destroybuttons();
+
             foreach (var buttonText in buttonTexts)
             {
                 GameObject newButton = Instantiate(buttonBase, buttonBase.transform.parent);
@@ -40,6 +42,11 @@ namespace UISample
             var text = button.GetComponentInChildren<Text>().text;
             fn(text);
             gameObject.SetActive(false);
+            Destroybuttons();
+        }
+
+        private void Destroybuttons()
+        {
             buttons.ForEach(x => Destroy(x));
             buttons.Clear();
         }
