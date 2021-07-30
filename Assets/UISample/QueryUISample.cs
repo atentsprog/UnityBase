@@ -22,6 +22,7 @@ namespace UISample
         internal void Show(string content, Action<string> _fn
             , params string[] buttonTexts)
         {
+            gameObject.SetActive(true);
             fn = _fn;
             transform.Find("ContentText").GetComponent<Text>().text = content;
 
