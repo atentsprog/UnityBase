@@ -57,6 +57,7 @@ public class EditorUtil
                 typeof(Image),
                 typeof(Text),
                 typeof(Button),
+                typeof(Toggle),
                 typeof(Animator)
             });
 

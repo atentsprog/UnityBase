@@ -40,7 +40,7 @@ static public class EditorButtonHelperExtend
 
 #if UNITY_EDITOR
         EditorButtonHelper editorButtonHelper = value.gameObject.AddComponent<EditorButtonHelper>();
-        editorButtonHelper.Init(component, unityAction);
+        editorButtonHelper.Init(component, unityAction.Method.ToString());
 #endif
     }
 
@@ -50,7 +50,17 @@ static public class EditorButtonHelperExtend
 
 #if UNITY_EDITOR
         EditorButtonHelper editorButtonHelper = value.gameObject.AddComponent<EditorButtonHelper>();
-        editorButtonHelper.Init(component, unityAction);
+        editorButtonHelper.Init(component, unityAction.Method.ToString());
+#endif
+    }
+
+    public static void AddListener(this Toggle value, Component component, UnityAction<bool> unityAction)
+    {
+        value.onValueChanged.AddListener(unityAction);
+
+#if UNITY_EDITOR
+        EditorButtonHelper editorButtonHelper = value.gameObject.AddComponent<EditorButtonHelper>();
+        editorButtonHelper.Init(component, unityAction.Method.ToString());
 #endif
     }
 }
@@ -61,17 +71,12 @@ public class EditorButtonHelper : MonoBehaviour
     public string component;
     public string Method;
 #if UNITY_EDITOR
-    internal void Init(Component component, UnityAction unityAction)
+    internal void Init(Component component, string methodName)
     {
         InitValue(component);
-        this.Method = unityAction.Method.ToString();
+        this.Method = methodName;
     }
 
-    internal void Init(Component component, UnityAction<string> unityAction)
-    {
-        InitValue(component);
-        this.Method = unityAction.Method.ToString();
-    }
 
     private void InitValue(Component component)
     {
