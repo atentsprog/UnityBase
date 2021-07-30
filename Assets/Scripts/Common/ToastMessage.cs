@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ToastMessage : SingletonMonoBehavior<ToastMessage>
 {
     public override int SortOrder => 1;
-
+    public override string HierarchyPath => $"Canvas1/{nameof(ToastMessage)}";
     [SerializeField]
     Text text;
 
