@@ -22,11 +22,11 @@ namespace UISample
         internal void Show(string content, Action<string> _fn
             , params string[] buttonTexts)
         {
-            gameObject.SetActive(true);
+            gameObject.SetActive(true); // <- 여기 내용 추가.
             fn = _fn;
             transform.Find("ContentText").GetComponent<Text>().text = content;
 
-            Destroybuttons();
+            DestroyButtons(); // <- 여기 내용 추가.
 
             foreach (var buttonText in buttonTexts)
             {
@@ -43,10 +43,9 @@ namespace UISample
             var text = button.GetComponentInChildren<Text>().text;
             fn(text);
             gameObject.SetActive(false);
-            Destroybuttons();
+            DestroyButtons();
         }
-
-        private void Destroybuttons()
+        private void DestroyButtons()
         {
             buttons.ForEach(x => Destroy(x));
             buttons.Clear();
