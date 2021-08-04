@@ -74,4 +74,9 @@ public class SaveString
     {
         return Value;
     }
+
+    public static implicit operator string(SaveString saveString)
+    {
+        return saveString.value;
+    }
 }
