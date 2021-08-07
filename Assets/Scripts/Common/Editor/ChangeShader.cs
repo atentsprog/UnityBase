@@ -126,7 +126,7 @@ All File In Directory : 디렉토리에 있는 모든 메테리얼을 대상으�
         internal Color colorValue;
         internal Vector4 vectorValue;
         internal float floatValue;
-        internal Texture textureValue;
+        internal Texture textureValue = null;
         internal List<float> floatArray = new List<float>();
 
         public ShaderPropertyInfo(string name, ShaderUtil.ShaderPropertyType type)
