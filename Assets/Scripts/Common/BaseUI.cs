@@ -178,19 +178,11 @@ where T : SingletonBase
 
         m_instance = _instance.t;
         m_instance.name = GetUIName(originalPath);
-        DontDestroyOnLoad(m_instance.gameObject.transform.root);
 
         //어웨이크에서 실행된 경우 여기서 ExecuteOneTimeInit 할 필요 없다.
-        if(m_instance.completeUiInite == false)
-            m_instance.ExecuteOneTimeInit();
+        if (m_instance.completeUiInite == false)
+            SingleTonInit(m_instance);
 
-
-        //RectTransform rectTransform = m_instance.gameObject.GetComponent<RectTransform>();
-        //if (rectTransform)
-        //{
-        //    rectTransform.localPosition = Vector3.zero;  <- 적용되면 원하지 않는 곳으로 UI위치 이동됨.
-        //    rectTransform.localScale = Vector3.one;
-        //}
 
         /// 최초 '/' 앞에 있는 경로
         string GetRootParentPath(string _originalPath)
@@ -300,13 +292,34 @@ where T : SingletonBase
     }
 
     //instance로 처음 접근한게 아니라Awake로 켜진것이라면 인스턴스를 초기화 한다.
-    virtual protected void Awake()
+    protected void Awake()
     {
+        if (IsInitInstance)
+        {
+            if (m_instance == this)
+            {
+                return;
+            }
+            else
+            {
+                Destroy(gameObject);
+
+                Debug.LogError($"{typeof(UIStackManager)} : 이미 초기화되었습니다, 불필요한 생성입니다 {transform.GetPath()} ", this);
+                return;
+            }
+        }
+
         if (completeUiInite == false)
         {
             m_instance = GetComponent<T>();
-            ExecuteOneTimeInit();
+            SingleTonInit(m_instance);
         }
+    }
+
+    static private void SingleTonInit(T m_instance)
+    {
+        DontDestroyOnLoad(m_instance.transform.root);
+        m_instance.ExecuteOneTimeInit();
     }
 
     private List<GameObject> childObject;

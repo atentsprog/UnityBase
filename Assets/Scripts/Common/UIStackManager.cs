@@ -86,27 +86,6 @@ public class UIStackManager : SingletonMonoBehavior<UIStackManager>
 
     private static UICloseInfoStack uICloserStack = new UICloseInfoStack();
 
-    override protected void Awake()
-    {
-        if (IsInitInstance)
-        {
-            if (m_instance == this)
-            {
-                return;
-            }
-            else
-            { 
-                Destroy(gameObject);
-
-                Debug.LogError($"{typeof(UIStackManager)} : 이미 초기화되었습니다, 불필요한 생성입니다 {transform.GetPath()} ", this);
-                return;
-            }
-        }
-        base.Awake();
-
-        DontDestroyOnLoad(gameObject);
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -117,7 +96,7 @@ public class UIStackManager : SingletonMonoBehavior<UIStackManager>
 
     internal static void PushUiStack(Transform tr, Action ac = null)
     {
-        UICloseInfo uICloser = new UICloseInfo(tr, ac);
+        UICloseInfo uICloser = new UICloseInfo(tr, ac); 
         uICloserStack.Push(uICloser);
     }
 
