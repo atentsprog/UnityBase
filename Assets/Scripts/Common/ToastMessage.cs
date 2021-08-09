@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,10 +11,24 @@ public class ToastMessage : SingletonMonoBehavior<ToastMessage>
     [SerializeField]
     Text text;
 
-    [SerializeField]
-    CanvasGroup canvasGroup;
 
-    public void ShowToast(string text, int duration = 2)
+    [System.Serializable]
+    public class ParamMessage
+    {
+        public string text;
+        public float duration;
+        public float minimumVisibleTime;
+
+        public ParamMessage(string text, float duration, float minimumVisibleTime)
+        {
+            this.text = text;
+            this.duration = duration;
+            this.minimumVisibleTime = minimumVisibleTime;
+        }
+    }
+    public List<ParamMessage> stackMessage = new List<ParamMessage>();
+    public float forceVisibleEndTime = 0;
+    public void ShowToast(string text, float duration = 2, float minimumVisibleTime = 0, bool newInstance = false)
     {
         base.Show(false); // 창이 닫힐때 강제로 UI를 보이게 하면 무한 루프 발생한다.
 
@@ -23,71 +38,62 @@ public class ToastMessage : SingletonMonoBehavior<ToastMessage>
             return;
         }
 
-        // 기존에 활성화 중인 메시지가 있다면 지금 코루틴이 끝난 다음에 연속해서 보여주자.
-        if (handle != null)
-            StopCoroutine(handle);
-        handle = StartCoroutine(showToastCo(text, duration));
-    }
-
-    Coroutine handle;
-
-    private IEnumerator showToastCo(string text,
-        int duration)
-    {
-        { //UI위치 안 맞아서 강제로 0위치로 이동시킴.
-            RectTransform rt = GetComponent<RectTransform>();
-            rt.offsetMin = Vector2.zero;
-            rt.offsetMax = Vector2.zero;
-        }
-
-        Color orginalColor = this.text.color;
-
-        this.text.text = text;
-        this.text.enabled = true;
-
-        //Fade in
-        yield return fadeInAndOut(canvasGroup, true, 0.5f);
-
-        //Wait for the duration
-        float counter = 0;
-        while (counter < duration)
+        if (newInstance)
         {
-            counter += Time.deltaTime;
-            yield return null;
-        }
-
-        //Fade out
-        yield return fadeInAndOut(canvasGroup, false, 0.5f);
-
-        this.text.enabled = false;
-        this.text.color = orginalColor;
-
-        Close();
-    }
-
-    IEnumerator fadeInAndOut(CanvasGroup canvasGroup, bool fadeIn, float duration)
-    {
-        float a, b;
-        if (fadeIn)
-        {
-            a = 0f;
-            b = 1f;
+            if (showToastCoHandle != null)
+                StopCoroutine(showToastCoHandle);
+            CreateToastMessageUI(text, duration);
         }
         else
         {
-            a = 1f;
-            b = 0f;
-        }
+            if (forceVisibleEndTime > Time.time)
+            {
+                stackMessage.Add(new ParamMessage(text, duration, minimumVisibleTime));
 
-        float counter = 0f;
+                if (waitAllowNextMessageTimeCoHandle == null)
+                    waitAllowNextMessageTimeCoHandle = StartCoroutine(WaitAllowNextMessageTimeCo());
+                return;
+            }
 
-        while (counter < duration)
-        {
-            counter += Time.deltaTime;
-            float alpha = Mathf.Lerp(a, b, counter / duration);
+            if (minimumVisibleTime > 0)
+                forceVisibleEndTime = Time.time + minimumVisibleTime;
 
-            canvasGroup.alpha = alpha;
-            yield return null;
+            // 기존에 활성화 중인 메시지가 있다면 지금 코루틴이 끝난 다음에 연속해서 보여주자.
+            if (showToastCoHandle != null)
+                StopCoroutine(showToastCoHandle);
+
+            ui.gameObject.SetActive(true);
+            ui.transform.SetAsLastSibling();
+            showToastCoHandle = StartCoroutine(ui.ShowToastCo(text, duration, Close));
         }
     }
+
+
+    public ToastMessageUI ui;
+    private void CreateToastMessageUI(string text, float duration)
+    {
+        ui.gameObject.SetActive(false);
+        var newUI = Instantiate(ui, transform);
+        newUI.gameObject.SetActive(true);
+        StartCoroutine(newUI.ShowToastCo(text, duration, Close, true));
+    }
+
+    private IEnumerator WaitAllowNextMessageTimeCo()
+    {
+        while (stackMessage.Count > 0)
+        {
+            while (forceVisibleEndTime > Time.time)
+                yield return new WaitForSeconds(forceVisibleEndTime - Time.time);
+
+            var nextMessage = stackMessage[0];
+            stackMessage.RemoveAt(0);
+            ShowToast(nextMessage.text, nextMessage.duration, nextMessage.minimumVisibleTime);
+        }
+
+        waitAllowNextMessageTimeCoHandle = null;
+    }
+
+    Coroutine showToastCoHandle;
+    Coroutine waitAllowNextMessageTimeCoHandle;
+
 }
