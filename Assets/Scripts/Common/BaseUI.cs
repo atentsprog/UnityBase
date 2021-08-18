@@ -64,7 +64,7 @@ public class SingletonBase : HistoryUI
 /// Close() : UI 닫는 함수
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class BaseUI<T> : SingletonMonoBehavior<T>, IHistoryUI
+public class BaseUI<T> : SingletonMonoBehaviour<T>, IHistoryUI
 where T : SingletonBase
 {
     protected bool AllowBackAction => true;
@@ -116,7 +116,7 @@ where T : SingletonBase
 /// IsActive : 초기화된 인스턴스가 하이어라키 상에서 활성화 중인지 확인(activeInHierarchy == true)
 /// Disable될때 부셔야 하는건 childObject에 추가하면 부셔진다.
 /// </summary>
-public class SingletonMonoBehavior<T> : SingletonBase
+public class SingletonMonoBehaviour<T> : SingletonBase
 where T : SingletonBase
 {
     public static bool ApplicationQuit = false;

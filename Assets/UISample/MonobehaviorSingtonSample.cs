@@ -8,7 +8,7 @@ namespace UISample
     /// <summary>/// 
     /// Monobehavior를 상속받으면 기본 함수들이 실행되어서 추가적인 실행비용이 있겠지만 무시할 수 있을 만큼 아주 작기 때문에 단점으로 보기 어렵습니다. 
     /// </summary>
-    public class MonobehaviorSingtonSample : SingletonMonoBehavior<MonobehaviorSingtonSample>
+    public class MonobehaviorSingtonSample : SingletonMonoBehaviour<MonobehaviorSingtonSample>
     {
         int myInt;
         public int MyPoint { get => myInt; set { print($"{myInt} -> {value}"); myInt = value; } }

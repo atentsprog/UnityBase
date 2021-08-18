@@ -8,7 +8,7 @@ using UnityEngine;
 /// <summary>
 /// esc누르면 UI닫는다
 /// </summary>
-public class UIStackManager : SingletonMonoBehavior<UIStackManager>
+public class UIStackManager : SingletonMonoBehaviour<UIStackManager>
 {
     public class UICloseInfoStack
     {

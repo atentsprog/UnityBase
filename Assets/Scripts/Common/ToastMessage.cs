@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ToastMessage : SingletonMonoBehavior<ToastMessage>
+
+public class ToastMessage : SingletonMonoBehaviour<ToastMessage>
 {
     public override int SortOrder => 1;
     public override string HierarchyPath => $"Canvas1/{nameof(ToastMessage)}";
