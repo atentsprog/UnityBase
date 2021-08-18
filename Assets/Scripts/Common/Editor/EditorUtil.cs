@@ -11,6 +11,17 @@ public class EditorUtil
     //# : shift
     //& : alt
     //% :  Winows의 Ctrl, macOS의 cmd키
+    [MenuItem("Util/Play %E")]
+    private static void PlayEditor()
+    {
+        EditorApplication.isPlaying = true;
+    }
+
+    [MenuItem("Util/Stop %W")]
+    private static void StopEditor()
+    {
+        EditorApplication.isPlaying = false;
+    }
 
     [MenuItem("Util/Open SourceTree #&s")]
     private static void OpenSourceTree()
