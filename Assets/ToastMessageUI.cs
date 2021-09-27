@@ -9,7 +9,7 @@ public class ToastMessageUI : MonoBehaviour
     public Text text;
 
     [SerializeField]
-    CanvasGroup canvasGroup;
+    CanvasGroup canvasGroup = null;
 
     Animator animator;
     private void Awake()
