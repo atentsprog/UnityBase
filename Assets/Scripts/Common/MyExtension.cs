@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 static public class MyExtension
 {
-    public static T AddOrGetComponent<T>(this Transform tr) where T : Component
+    public static T AddOrGetComponent<T>(this Component tr) where T : Component
     {
         T t = tr.GetComponent<T>();
         if (t == null)
