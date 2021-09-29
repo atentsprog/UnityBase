@@ -4,17 +4,26 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class PlayerPrefsData<T> where T : new()
+public class PlayerPrefsData<T> : ISerializationCallbackReceiver
+    where T : new()
 {
+    bool useLoadData = true;
+    public void OnBeforeSerialize() => useLoadData = false;
+    public void OnAfterDeserialize() => useLoadData = true;
+
     public T data = default;
     readonly string key;
     public bool useDebug;
 
     public PlayerPrefsData()
     {
+        if (useLoadData == false)
+            return;
+
         key = typeof(T).ToString();
         LoadData();
     }
+
 
     public PlayerPrefsData(string _key)
     {
