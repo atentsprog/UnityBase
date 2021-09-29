@@ -10,11 +10,25 @@ using UnityEngine;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [System.Serializable]
-public class FileData<T> where T : new()
+public class FileData<T> : ISerializationCallbackReceiver
+    where T : new()
 {
+    bool useLoadData = true;
+    public void OnBeforeSerialize() => useLoadData = false;
+    public void OnAfterDeserialize() => useLoadData = true;
+
     public T data = default;
     readonly string key;
     public bool useDebug;
+
+    public FileData()
+    {
+        if (useLoadData == false)
+            return;
+
+        key = typeof(T).ToString();
+        LoadData();
+    }
 
     public FileData(string _key)
     {
