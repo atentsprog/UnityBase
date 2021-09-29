@@ -16,6 +16,12 @@ public class PlayerPrefsData<T> where T : new()
     readonly string key;
     public bool useDebug;
 
+    public PlayerPrefsData()
+    {
+        key = typeof(T).ToString();
+        LoadData();
+    }
+
     public PlayerPrefsData(string _key)
     {
         key = _key;
