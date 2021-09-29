@@ -2,12 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Data<T>
-{
-    public T data;
-}
-
 
 [System.Serializable]
 public class PlayerPrefsData<T> where T : new()
