@@ -9,6 +9,44 @@ using UnityEngine;
 /// </summary>
 static public class MyExtension
 {
+    static public void SetPositionX(this Transform tr, float x)
+    {
+        var pos = tr.position;
+        pos.x = x;
+        tr.position = pos;
+    }
+
+    static public void SetIfNull(this Transform tr, ref Transform refTr, string findName)
+    {
+        if (refTr != null)
+            return;
+
+        refTr = tr.Find(findName);
+    }
+
+    static public void SetLayer(this GameObject go, int layer)
+    {
+        Util.SetLayerWithChilds(go, layer);
+    }
+    public static void ForEach<T>(this IEnumerable<T> list, Action<T> action)
+    {
+        foreach (var item in list)
+            action(item);
+    }
+    public static void HideChild(this Transform tr, params string[] childs)
+    {
+        foreach (var item in childs)
+        {
+            tr.Find(item)?.gameObject.SetActive(false);
+        }
+    }
+    public static void ShowChild(this Transform tr, params string[] childs)
+    {
+        foreach (var item in childs)
+        {
+            tr.Find(item)?.gameObject.SetActive(true);
+        }
+    }
     public static T AddOrGetComponent<T>(this Component tr) where T : Component
     {
         T t = tr.GetComponent<T>();

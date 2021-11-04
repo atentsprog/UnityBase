@@ -5,6 +5,13 @@ using UnityEngine;
 internal class Util
 {
 
+    static public void SetLayerWithChilds(GameObject go, int layer)
+    {
+        go.GetComponentsInChildren<GameObject>(true)
+            .ForEach(x => x.layer = layer);
+    }
+
+
     public static void SetTrIfNull(ref Transform refTr, string findName)
     {
         if (refTr != null)
@@ -14,19 +21,7 @@ internal class Util
         if (findName == null)
             Debug.LogError($"{findName} 이 씬에 없음");
     }
-    
-    static public void SetLayer(GameObject go, int layer)
-    {
-        go.layer = layer;
 
-        Transform t = go.transform;
-
-        for (int i = 0, imax = t.childCount; i < imax; ++i)
-        {
-            Transform child = t.GetChild(i);
-            SetLayer(child.gameObject, layer);
-        }
-    }
 
     public class TempRectInfo<T> where T : SingletonBase
     {
