@@ -5,6 +5,16 @@ using UnityEngine;
 internal class Util
 {
 
+    public static void SetTrIfNull(ref Transform refTr, string findName)
+    {
+        if (refTr != null)
+            return;
+
+        refTr = GameObject.Find(findName)?.transform;
+        if (findName == null)
+            Debug.LogError($"{findName} 이 씬에 없음");
+    }
+    
     static public void SetLayer(GameObject go, int layer)
     {
         go.layer = layer;
